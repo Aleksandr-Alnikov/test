@@ -1,13 +1,25 @@
 "use client";
 
-import {useForm} from "react-hook-form";
-import {toast, ToastContainer} from "react-toastify";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-export const Form = () => {
-    const {register, handleSubmit, reset, formState: { errors }} = useForm();
+interface FormData {
+    token: string;
+    title: string;
+    description: string;
+    tags: string;
+    budget_from: number;
+    budget_to: number;
+    deadline: number;
+    reminds: number;
+    rules: string;
+}
 
-    const onSubmit = async (data: any) => {
+export const Form = () => {
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>();
+
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
         const simulatedResponse = {
             ok: "HardTask created successfully.",
             task: {
@@ -26,7 +38,7 @@ export const Form = () => {
 
         if (simulatedResponse.ok) {
             toast.success('Задача успешно опубликована!', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -35,19 +47,10 @@ export const Form = () => {
                 progress: undefined,
                 theme: "light",
             });
-            reset({
-                title: '',
-                description: '',
-                tags: '',
-                budget_from: 0,
-                budget_to: 0,
-                deadline: 0,
-                reminds: 0,
-                rules: '',
-            });
+            reset();
         } else {
             toast.error('Ошибка при публикации задачи.', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
